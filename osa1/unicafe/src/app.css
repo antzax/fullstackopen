@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+table {
+  border: 3px dashed purple;
+  border-collapse: collapse;
+}
+
+tbody tr:nth-child(odd) {
+  font-family: "Rock Salt";
+  background-color: rgb(191, 234, 183);
+}
+
+tbody tr:nth-child(even) {
+  background-color: rgb(148, 146, 147);
+}
