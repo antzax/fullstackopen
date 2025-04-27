@@ -1,0 +1,41 @@
+### PHONEBOOK PERSONS REST API
+GET http://localhost:3001/api/persons
+###
+GET http://localhost:3001/api/persons/1
+###
+GET http://localhost:3001/api/persons/5555
+###
+DELETE http://localhost:3001/api/persons/1
+###
+DELETE http://localhost:3001/api/persons/9191
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Anton",
+  "number": "123123123"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Anton"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "number": "123123123"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "123123123"
+}
+###
