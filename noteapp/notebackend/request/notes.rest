@@ -1,0 +1,14 @@
+GET http://localhost:3001/api/notes
+###
+GET http://localhost:3001/api/notes/1
+###
+GET http://localhost:3001/api/unknown/
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+  "content": "VS code rest client is nice"
+}
+###
+DELETE http://localhost:3001/api/notes/1
