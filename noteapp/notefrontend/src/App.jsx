@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Note from "./components/Note";
-import axios from "axios";
 import noteService from "./services/notes";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -51,7 +50,6 @@ const App = () => {
   };
 
   const handleNoteChange = (event) => {
-    console.log(event.target.value);
     setNewNote(event.target.value);
   };
 
