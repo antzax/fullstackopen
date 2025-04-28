@@ -62,7 +62,7 @@ app.post('/api/notes', (req, res) => {
   const body = req.body
 
   if (!body.content) {
-    return response.status(404).json({
+    return res.status(404).json({
       error: 'content missing'
     })
   }
@@ -74,7 +74,6 @@ app.post('/api/notes', (req, res) => {
   }
 
   notes = notes.concat(note)
-  console.log(notes)
   res.json(note)
 })
 
