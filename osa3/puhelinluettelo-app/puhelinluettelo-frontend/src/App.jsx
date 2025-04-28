@@ -74,11 +74,13 @@ const App = () => {
     const person = persons.find((person) => person.id === id);
     if (window.confirm(`Are you sure you want to delete ${person.name}?`)) {
       personService.destroy(person.id).then((deletedPerson) => {
+        console.log(person.id)
+        console.log(deletedPerson.id)
         setPersons(persons.filter((person) => person.id !== deletedPerson.id));
+        setNotification(`${person.name} was succesfully deleted.`)
+        setTimeout(() => setNotification(null), 5000)
       });
     }
-    setNotification(`${person.name} was succesfully deleted.`)
-    setTimeout(() => setNotification(null), 5000)
   };
 
   const handlePersonUpdate = () => {
