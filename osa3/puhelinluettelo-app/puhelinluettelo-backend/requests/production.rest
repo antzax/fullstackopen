@@ -1,0 +1,9 @@
+GET https://puhelinluettelo-app-3j2i.onrender.com/api/persons
+###
+POST https://puhelinluettelo-app-3j2i.onrender.com/api/persons
+Content-Type: application/json
+
+{
+ "name": "Anton2",
+ "number": "123" 
+}
