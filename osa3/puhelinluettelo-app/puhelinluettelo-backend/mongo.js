@@ -1,15 +1,14 @@
+require('dotenv').config()
 const mongoose = require("mongoose");
 
-if (process.argv.length < 3) {
-  console.log("Please provide password");
-  process.exit(1);
+if (process.argv.length < 3){
+  console.log("Did you forget password?")
+  process.exit(1)
 }
 
-const database = "phonebook";
-const password = process.argv[2];
-const mongoUri = `mongodb+srv://anton:${password}@cluster0.1cjv4z7.mongodb.net/${database}?retryWrites=true&w=majority&appName=Cluster0`;
+const dbPass = process.argv[2]
+const mongoUri=`mongodb+srv://antonv1997:${dbPass}@cluster0.uc49hom.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0`
 
-mongoose.set('strictQuery', false)
 mongoose.connect(mongoUri);
 
 const personSchema = new mongoose.Schema({
