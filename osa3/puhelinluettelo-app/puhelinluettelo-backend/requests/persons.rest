@@ -1,9 +1,9 @@
 ### PHONEBOOK PERSONS REST API
 GET http://localhost:3001/api/persons
 ###
-GET http://localhost:3001/api/persons/1
+GET http://localhost:3001/api/persons/681094174dfb718196e6cd3
 ###
-GET http://localhost:3001/api/persons/5555
+GET http://localhost:3001/api/persons/681094174dfb718196e6cd37
 ###
 DELETE http://localhost:3001/api/persons/1
 ###
@@ -13,7 +13,7 @@ POST http://localhost:3001/api/persons/
 Content-Type: application/json
 
 {
-  "name": "Anton",
+  "name": "Testi Henkilö",
   "number": "123123123"
 }
 ###
