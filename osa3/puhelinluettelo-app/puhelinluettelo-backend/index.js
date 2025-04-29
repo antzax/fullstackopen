@@ -25,6 +25,9 @@ app.get("/api/persons", (req, res, next) => {
   Person.find({}).then(persons => {
     res.json(persons);
   })
+  .catch(error => {
+    next(error)
+  })
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
@@ -48,10 +51,12 @@ app.post("/api/persons", (req, res, next) => {
     name,
     number,
   })
+
   person.save().then(person => {
     res.json(person)
   })
   .catch(error => {
+    console.log("POST ERROR")
     next(error)
   })
 })
@@ -68,15 +73,16 @@ app.delete("/api/persons/:id", (req, res, next) => {
 app.put("/api/persons/:id", (req, res, next) => {
   const { name, number } = req.body
 
-  Person.findById(req.params.id).then(person =>{
+  Person.findById(req.params.id).then(person => {
     person.name = name
     person.number = number
 
     person.save().then(updatedPerson => {
       res.status(200).json(updatedPerson)
     })
-  }).catch(error => {
-    next(error)
+    .catch(error => {
+      next(error)
+    })
   })
 })
 
@@ -87,9 +93,10 @@ const unknownEndpoint = (req, res) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, req, res, next) => {
-  console.log(error)
   if (error.name === 'CastError' || error.name === 'ReferenceError') {
     return res.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).send({ error: error.message })
   }
 
   next(error)
