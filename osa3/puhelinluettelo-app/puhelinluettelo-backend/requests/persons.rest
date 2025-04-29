@@ -18,5 +18,5 @@ Content-Type: application/json
 
 {
   "name": "Put testi Henkilö",
-  "number": "999999999"
+  "number": "123"
 }
