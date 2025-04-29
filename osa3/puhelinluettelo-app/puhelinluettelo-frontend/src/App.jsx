@@ -103,7 +103,6 @@ const App = () => {
         setNewNumber("");
       })
       .catch(error => {
-        console.log(error)
         setErrorMessage(error.response.data.error)
         setTimeout(() => setErrorMessage(null), 5000)
       })
