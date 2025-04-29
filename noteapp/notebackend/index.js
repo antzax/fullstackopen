@@ -17,7 +17,7 @@ const requestLogger = (req, res, next) => {
 
 app.use(requestLogger)
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>')
 })
 
@@ -35,7 +35,7 @@ app.get('/api/notes/:id', (req, res, next) => {
       res.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.post('/api/notes', (req, res, next) => {
@@ -49,14 +49,14 @@ app.post('/api/notes', (req, res, next) => {
   note.save().then(note => {
     res.json(note)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/notes/:id', (req, res, next) => {
-  Note.findByIdAndDelete(req.params.id).then(result =>{
+  Note.findByIdAndDelete(req.params.id).then(() => {
     res.status(204).end()
   })
-  .catch(error => next(error) )
+    .catch(error => next(error) )
 })
 
 app.put('/api/notes/:id', (req, res, next) => {
@@ -74,7 +74,7 @@ app.put('/api/notes/:id', (req, res, next) => {
       res.status(200).json(updatedNote)
     })
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 
@@ -86,7 +86,7 @@ const errorHandler = (error, req, res, next) => {
   console.log(error.message)
 
   if (error.name === 'CastError') {
-    return res.status(400).send({ error: 'Malformatted id'})
+    return res.status(400).send({ error: 'Malformatted id' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).send({ error: error.message })
   }
