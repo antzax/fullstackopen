@@ -11,12 +11,17 @@ app.use(express.json())
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time :body'))
 
-app.get("/info", (req, res) => {
-  res.send(`<p>Phonebook has info for ${persons.length} people</p>
-    <p>${new Date()}</p>`);
+app.get("/info", (req, res, next) => {
+  Person.find({}).then(persons => {
+    res.send(
+      `<p>Phonebook has info for
+      ${persons.length} people</p>
+      <p>${new Date()}</p>`);
+  })
+  .catch(error => next(error))
 });
 
-app.get("/api/persons", (req, res) => {
+app.get("/api/persons", (req, res, next) => {
   Person.find({}).then(persons => {
     res.json(persons);
   })
