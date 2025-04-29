@@ -26,12 +26,9 @@ const App = () => {
         setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
       })
       .catch((error) => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        );
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
+        console.log(error.message)
+        setErrorMessage(`Note '${note.content}' was already removed from server`);
+        setTimeout(() => setErrorMessage(null), 5000);
         setNotes(notes.filter((n) => n.id !== id));
       });
   };
@@ -46,7 +43,12 @@ const App = () => {
     noteService.create(noteObject).then((returnedNote) => {
       setNotes(notes.concat(returnedNote));
       setNewNote("");
-    });
+    })
+    .catch(error => {
+      console.log(error)
+      setErrorMessage(error.response.data.error)
+      setTimeout(() => setErrorMessage(null), 5000)
+    })
   };
 
   const handleNoteChange = (event) => {
