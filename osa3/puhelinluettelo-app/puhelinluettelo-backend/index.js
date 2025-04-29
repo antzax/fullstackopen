@@ -11,29 +11,6 @@ app.use(express.json())
 morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time :body'))
 
-let persons = [
-  {
-    name: "Arto Hellas",
-    number: "12-43-321122",
-    id: "1",
-  },
-  {
-    name: "Ada Lovelace",
-    number: "12-43-12321",
-    id: "2",
-  },
-  {
-    name: "Dan Abramov",
-    number: "12-43-234345",
-    id: "3",
-  },
-  {
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-    id: "4",
-  },
-]
-
 app.get("/info", (req, res) => {
   res.send(`<p>Phonebook has info for ${persons.length} people</p>
     <p>${new Date()}</p>`);
@@ -45,19 +22,32 @@ app.get("/api/persons", (req, res) => {
   })
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  Person.findById(req.params.id).then(person => {
-    res.json(person)
+app.get("/api/persons/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+  .then(person => {
+    if (person) {
+      res.json(person)
+    } else {
+      res.status(400).end()
+    }
+  })
+  .catch(error => {
+    next(error)
   })
 })
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
+  const { name, number } = req.body
+
   const person = new Person({
-    name: req.body.name,
-    number: req.body.number,
+    name,
+    number,
   })
   person.save().then(person => {
     res.json(person)
+  })
+  .catch(error => {
+    next(error)
   })
 })
 
@@ -68,7 +58,6 @@ app.delete("/api/persons/:id", (req, res, next) => {
   .catch(error => {
     next(error)
   })
-  res.status(204).end()
 })
 
 const unknownEndpoint = (req, res) => {
@@ -77,7 +66,16 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint)
 
+const errorHandler = (error, req, res, next) => {
+  console.log(error)
+  if (error.name === 'CastError' || error.name === 'ReferenceError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
 
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
