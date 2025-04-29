@@ -40,21 +40,18 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-  const persons = Person.find({}).then(persons => {
-    console.log(persons)
+  Person.find({}).then(persons => {
     res.json(persons);
   })
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = req.params.id
-  Person.findById(id).then(person => {
+  Person.findById(req.params.id).then(person => {
     res.json(person)
   })
 })
 
 app.post("/api/persons", (req, res) => {
-  const id = req.params.id
   const person = new Person({
     name: req.body.name,
     number: req.body.number,
@@ -64,12 +61,23 @@ app.post("/api/persons", (req, res) => {
   })
 })
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = req.params.id
-  persons = persons.filter(person => person.id !== id)
-
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id).then(result => {
+    res.status(204).end()
+  })
+  .catch(error => {
+    next(error)
+  })
   res.status(204).end()
 })
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
