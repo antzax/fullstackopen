@@ -62,12 +62,19 @@ const App = () => {
 
     personService
       .create(newPersonObject)
-      .then((addedPerson) => setPersons(persons.concat(addedPerson)));
-
-    setNotification(`${newName} was succesfully added.`)
-    setTimeout(() => setNotification(null), 5000)
-    setNewName("");
-    setNewNumber("");
+      .then((addedPerson) => {
+        setPersons(persons.concat(addedPerson))
+        setNotification(`${newName} was succesfully added.`)
+        setNewName("");
+        setNewNumber("");
+        setTimeout(() => setNotification(null), 5000)
+      })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+      })
+      
   };
 
   const handlePersonDelete = (id) => {
@@ -87,19 +94,19 @@ const App = () => {
     });
 
     personService
-      .update(existingPerson.id, { ...existingPerson, number: newNumber })
+      .update({...existingPerson, number: newNumber })
       .then((returnedPerson) => {
-        setPersons(
-          persons.map((person) =>
-            person.id === returnedPerson.id ? returnedPerson : person
-          )
-        );
-      });
-
-    setNotification(`${existingPerson.name} was succesfully updated.`)
-    setTimeout(() => setNotification(null), 5000)
-    setNewName("");
-    setNewNumber("");
+        setPersons(persons.map((person) => person.id === returnedPerson.id ? returnedPerson : person));
+        setNotification(`${existingPerson.name} was succesfully updated.`)
+        setTimeout(() => setNotification(null), 5000)
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+      })
   };
 
   return (
