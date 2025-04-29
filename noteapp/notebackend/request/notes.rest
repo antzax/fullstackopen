@@ -1,14 +1,22 @@
+### Index
 GET http://localhost:3001/api/notes
-###
-GET http://localhost:3001/api/notes/680fd18de0c1c292865d4f6c
-###
-GET http://localhost:3001/api/unknown/
-###
+### Create
 POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-  "content": "VS code rest client is nice"
+  "content": "VS code rest client is nice",
+  "important": false
 }
-###
-DELETE http://localhost:3001/api/notes/1
+### Show
+GET http://localhost:3001/api/notes/680fd18de0c1c292865d4f6c
+### Edit
+PUT http://localhost:3001/api/notes/680fd18de0c1c292865d4f6c
+Content-Type: application/json
+
+{
+  "content": "HTML is hard",
+  "important": true 
+}
+### destroy
+DELETE http://localhost:3001/api/notes/6810bb310feaee3fd53728b0
