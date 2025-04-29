@@ -1,10 +1,10 @@
 ### Index Persons
 GET http://localhost:3001/api/persons
 ### Show Person
-GET http://localhost:3001/api/persons/681094174dfb718196e6cd37
+GET http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
 ### Destroy person
-DELETE http://localhost:3001/api/persons/6810d38ab13d5bfe6a5ec112
-###
+DELETE http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
+### Create Person
 POST http://localhost:3001/api/persons/
 Content-Type: application/json
 
@@ -12,26 +12,11 @@ Content-Type: application/json
   "name": "Testi Henkilö",
   "number": "123123123"
 }
-###
-POST http://localhost:3001/api/persons/
+### Update Person
+PUT http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
 Content-Type: application/json
 
 {
-  "name": "Anton"
+  "name": "Put testi Henkilö",
+  "number": "999999999"
 }
-###
-POST http://localhost:3001/api/persons/
-Content-Type: application/json
-
-{
-  "number": "123123123"
-}
-###
-POST http://localhost:3001/api/persons/
-Content-Type: application/json
-
-{
-  "name": "Arto Hellas",
-  "number": "123123123"
-}
-###
