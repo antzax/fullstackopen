@@ -1,13 +1,9 @@
-### PHONEBOOK PERSONS REST API
+### Index Persons
 GET http://localhost:3001/api/persons
-###
-GET http://localhost:3001/api/persons/681094174dfb718196e6cd3
-###
+### Show Person
 GET http://localhost:3001/api/persons/681094174dfb718196e6cd37
-###
-DELETE http://localhost:3001/api/persons/1
-###
-DELETE http://localhost:3001/api/persons/9191
+### Destroy person
+DELETE http://localhost:3001/api/persons/6810d38ab13d5bfe6a5ec112
 ###
 POST http://localhost:3001/api/persons/
 Content-Type: application/json
