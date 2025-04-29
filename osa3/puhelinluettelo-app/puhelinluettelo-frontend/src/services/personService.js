@@ -16,8 +16,8 @@ const destroy = (id) => {
   return request.then(response => response.data)
 }
 
-const update = (id, newPersonObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newPersonObject)
+const update = (newPersonObject) => {
+  const request = axios.put(`${baseUrl}/${newPersonObject.id}`, newPersonObject)
   return request.then(response => response.data)
 }
 
