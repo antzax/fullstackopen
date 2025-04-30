@@ -23,4 +23,20 @@ blogRoutes.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
+blogRoutes.put('/:id', async (request, response) => {
+  const { author, title, url, likes } = request.body
+  const id = request.params.id
+
+  const doc = await Blog.findById(id)
+
+  doc.title = title
+  doc.author = author
+  doc.url = url
+  doc.likes = likes
+
+  const savedDoc = await doc.save()
+
+  response.status(201).json(savedDoc)
+})
+
 module.exports = blogRoutes

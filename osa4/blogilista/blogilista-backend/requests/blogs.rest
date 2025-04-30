@@ -11,4 +11,14 @@ Content-Type: application/json
 }
 ###
 DELETE http://localhost:3001/api/blogs/68121393f1f403fa1fe647ab
+###
+PUT http://localhost:3001/api/blogs/68124336870121dcd6449beb
+Content-Type: application/json
 
+{
+  "author": "but",
+  "title": "putblog",
+  "url": "www.put.fi",
+  "likes": 1
+}
+###
