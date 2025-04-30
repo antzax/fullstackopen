@@ -26,7 +26,7 @@ notesRouter.post('/', (req, res, next) => {
   })
 
   note.save().then(note => {
-    res.json(note)
+    res.status(201).json(note)
   })
     .catch(error => next(error))
 })
