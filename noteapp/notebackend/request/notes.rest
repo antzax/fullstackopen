@@ -5,8 +5,9 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-  "content": "lol",
-  "important": false
+  "content": "Take magnesium",
+  "important": false,
+  "userId": "68126376281217f5b8d5ec07"
 }
 ### Show
 GET http://localhost:3001/api/notes/680fd18de0c1c292865d4f6c
