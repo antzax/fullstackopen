@@ -1,0 +1,31 @@
+{
+  "name": "blogilista-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENVIROMENT=production node index.js",
+    "dev": "cross-env NODE_ENVIROMENT=development node --watch index.js",
+    "test": "cross-env NODE_ENVIROMENT=test node --test",
+    "lint": "eslint .",
+    "build:ui": "cd ../blogilsita-frontend && npm run build",
+    "deploy:full": "rm -rf dist && build:ui"
+  },
+  "author": "av97",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@stylistic/eslint-plugin-js": "^4.2.0",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "supertest": "^7.1.0"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.14.0",
+    "morgan": "^1.10.0"
+  }
+}

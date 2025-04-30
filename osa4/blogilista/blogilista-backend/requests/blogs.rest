@@ -1,0 +1,14 @@
+GET http://localhost:3001/api/blogs
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "testblog",
+  "author": "testor",
+  "url": "www.test.fi",
+  "likes": 0
+}
+###
+DELETE http://localhost:3001/api/blogs/68121393f1f403fa1fe647ab
+
