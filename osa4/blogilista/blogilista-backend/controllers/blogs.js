@@ -1,12 +1,12 @@
 const Blog = require('../models/blog')
-const blogRoutes = require('express').Router()
+const blogsRouter = require('express').Router()
 
-blogRoutes.get('/', async (request, response) => {
+blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
   response.json(blogs)
 })
 
-blogRoutes.post('/', async (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   const { title, author, url, likes } = request.body
 
   const blog = new Blog({ title, author, url, likes })
@@ -15,7 +15,7 @@ blogRoutes.post('/', async (request, response) => {
   response.status(201).json(blog)
 })
 
-blogRoutes.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
 
   await Blog.findByIdAndDelete(id)
@@ -23,7 +23,7 @@ blogRoutes.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
-blogRoutes.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', async (request, response) => {
   const { author, title, url, likes } = request.body
   const id = request.params.id
 
@@ -39,4 +39,4 @@ blogRoutes.put('/:id', async (request, response) => {
   response.status(201).json(savedDoc)
 })
 
-module.exports = blogRoutes
+module.exports = blogsRouter
