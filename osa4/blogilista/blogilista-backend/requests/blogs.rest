@@ -4,9 +4,10 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "testblog",
-  "author": "testor",
-  "url": "www.test.fi",
+  "title": "The random title",
+  "author": "John Wick",
+  "url": "www.random.com",
+  "userId": "6813936a4047b29f7e649df8",
   "likes": 0
 }
 ###
