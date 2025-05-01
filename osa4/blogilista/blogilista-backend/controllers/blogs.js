@@ -1,6 +1,6 @@
 const Blog = require('../models/blog')
-const blogsRouter = require('express').Router()
 const User = require('../models/user')
+const blogsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
@@ -32,7 +32,21 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
 
-  await Blog.findByIdAndDelete(id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if(!decodedToken.id) {
+    return response.status(401).json({ error: 'token invaid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+  const blog = await Blog.findById(id)
+
+  console.log(blog.user)
+  console.log(user)
+
+  if(blog.user.toString() === user.id.toString()) {
+    await Blog.findByIdAndDelete(id)
+  }
 
   response.status(204).end()
 })
