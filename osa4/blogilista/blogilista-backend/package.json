@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENVIROMENT=production node index.js",
-    "dev": "cross-env NODE_ENVIROMENT=development node --watch index.js",
-    "test": "cross-env NODE_ENVIROMENT=test node --test",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "test": "cross-env NODE_ENV=test node --test",
     "lint": "eslint .",
     "build:ui": "cd ../blogilsita-frontend && npm run build",
     "deploy:full": "rm -rf dist && build:ui"

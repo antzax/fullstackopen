@@ -4,33 +4,59 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 const helper = require('./test-helper')
 
 const api = supertest(app)
+let TOKEN = ''
 
 describe('when initial notes are loaded to db', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
-    console.log('cleared database')
-    await Blog.insertMany(helper.initialBlogs)
-    console.log('initialized database with notes')
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('testpassword', 10)
+    const user = new User({ username: 'testuser', passwordHash })
+    const savedUser = await user.save()
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'testuser', password: 'testpassword' })
+
+    TOKEN = loginResponse.body.token
+
+    const blogObjects = helper.initialBlogs.map(blog => {
+      return new Blog({ ...blog, user: savedUser._id })
+    })
+
+    const promiseArray = blogObjects.map(blog => blog.save())
+    await Promise.all(promiseArray)
   })
 
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
       .expect('Content-Type', /json/)
       .expect(200)
   })
 
   test('GET /api/blogs', async () => {
-    const response = await api.get('/api/blogs')
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
 
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 
   test('blog _id is changed to id', async () => {
-    const { body } = await api.get('/api/blogs')
+    const { body } = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
+      
     const firstBlog = body[0]
 
     assert(Object.keys(firstBlog).includes('id'))
@@ -45,6 +71,7 @@ describe('when initial notes are loaded to db', () => {
 
     const savedBlog = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
       .send(blogWithoutLikes)
       .expect(201)
       .expect('Content-Type', /json/)
@@ -52,7 +79,7 @@ describe('when initial notes are loaded to db', () => {
     assert.strictEqual(savedBlog.body.likes, 0)
   })
 
-  test('missin url or title results status 400', async () => {
+  test('missing url or title results status 400', async () => {
     const blogWithoutTitle = {
       author: 'Somebody',
       url: 'www.somewebsite.com',
@@ -61,6 +88,7 @@ describe('when initial notes are loaded to db', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
       .send(blogWithoutTitle)
       .expect(400)
     
@@ -72,16 +100,20 @@ describe('when initial notes are loaded to db', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${TOKEN}`)
       .send(blogWithoutAuthor)
       .expect(400)
   })
   
   describe('when blog is deleted', () => {
-    test('DELETE /blog/api/:id', async () => {
+    test.only('DELETE /blog/api/:id', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
       
-      await Blog.deleteOne(blogToDelete)
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
 
@@ -100,6 +132,7 @@ describe('when initial notes are loaded to db', () => {
 
       const savedBlog = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /json/)
@@ -125,6 +158,7 @@ describe('when initial notes are loaded to db', () => {
 
       const response = await api
         .put(`/api/blogs/${originalBlog.toJSON().id}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
