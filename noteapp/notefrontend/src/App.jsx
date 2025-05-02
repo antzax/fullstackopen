@@ -12,15 +12,27 @@ const App = () => {
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState("")
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
-    noteService.getAll().then((initialNotes) => {
+    const fetchData = async () => {
+      const initialNotes = await noteService.getAll()
       setNotes(initialNotes);
-    });
+    }
+    fetchData()
   }, []);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
 
   const toggleImportanceOf = (id) => {
     const note = notes.find((n) => n.id === id);
@@ -67,23 +79,33 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password })
       noteService.setToken(user.token)
+      window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
       setUser(user)
+      setNotificationMessage(`${user.username} logged in succesfully`)
+      setTimeout(() => setNotificationMessage(null), 5000)
       setUsername("")
       setPassword("")
     } catch (exception) {
       setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setTimeout(() => setErrorMessage(null), 5000)
     }
   }
 
-  
+  const handleLogout = () => {
+    if(window.confirm("do you want to logut?")){
+      window.localStorage.removeItem('loggedNoteAppUser')
+      setNotificationMessage(`${user.username} logged out succesfully`)
+      setTimeout(() => setNotificationMessage(null), 5000)
+      setUser(null)
+    }
+  }
+
   return (
     <div>
       <h1>Notes</h1>
+      { user && <button onClick={handleLogout}>logout</button>}
 
-      <Notification message={errorMessage} />
+      <Notification errorMessage={errorMessage} notificationMessage={notificationMessage}/>
 
       {user ?
       <div>
