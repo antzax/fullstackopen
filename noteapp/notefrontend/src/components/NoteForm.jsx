@@ -1,8 +1,9 @@
-const NoteForm = ({ addNote, newNote, setNewNote }) => {
+const NoteForm = ({ onSubmit, value, handleChange }) => {
   return (
     <div>
-      <form onSubmit={addNote}>
-        <input value={newNote} onChange={({ target }) => setNewNote(target.value)} />
+      <h2>Create a new note</h2>
+      <form onSubmit={onSubmit}>
+        <input value={value} onChange={({ target }) => handleChange(target.value)} />
         <button type="submit">save</button>
       </form>
     </div>

@@ -3,6 +3,8 @@ import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
+import NewBlogForm from "./components/NewBlogForm";
+import './main.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -10,6 +12,9 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [title, setTitle] = useState("")
+  const [author, setAuthor] = useState("")
+  const [url, setUrl] = useState("")
 
   useEffect( () => {
     const userJSON = window.localStorage.getItem("loggedInUser");
@@ -44,7 +49,31 @@ const App = () => {
   const handleLogout = () => {
     setUser(null)
     window.localStorage.removeItem("loggedInUser")
+    setNotification(`${user.username} logged out`);
+    setTimeout(() => setNotification(null), 3000);
   }
+
+  const addBlog = async (e) => {
+    e.preventDefault()
+
+    const newBlogObject = {
+      title,
+      author,
+      url,
+    }
+
+    const savedBlog = await blogService.create(newBlogObject)
+    setBlogs(blogs.concat(savedBlog))
+
+    setTitle("")
+    setAuthor("")
+    setUrl("")
+
+    setNotification(`${savedBlog.title} added succesfully`);
+    setTimeout(() => setNotification(null), 3000);
+  }
+
+ 
 
   return (
     <div>
@@ -55,6 +84,9 @@ const App = () => {
       {user ? (
         <div>
           <h2>blogs</h2>
+
+          <NewBlogForm addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} />
+
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
@@ -68,6 +100,7 @@ const App = () => {
           handleLogin={handleLogin}
         />
       )}
+
     </div>
   );
 };
