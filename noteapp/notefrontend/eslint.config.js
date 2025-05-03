@@ -1,33 +1,41 @@
 import js from '@eslint/js'
+import stylisticJs from '@stylistic/eslint-plugin-js'
 import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
 
-export default [
-  { ignores: ['dist'] },
+export default defineConfig([
+  globalIgnores(['vite.config.js', 'dist']),
   {
-    files: ['**/*.{js,jsx}'],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-      },
-    },
+    name: 'react files',
+    files: ['**/*.{js,mjs,cjs,jsx}'],
     plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      js,
+      stylisticJs,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      semi: ['error', 'never'],
+      indent: ['error', 2],
+      quotes: ['error', 'single'],
+      eqeqeq: ['error'],
+      'no-trailing-spaces': ['error'],
+      'object-curly-spacing': ['error', 'always'],
+    },
+    languageOptions: {
+      globals: globals.browser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
-]
+])

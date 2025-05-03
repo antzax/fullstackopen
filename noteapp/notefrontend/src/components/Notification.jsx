@@ -1,4 +1,4 @@
-const Notification = ({ errorMessage, notificationMessage}) => {
+const Notification = ({ errorMessage, notificationMessage }) => {
   if(errorMessage) {
     return (
       <div className="error">
@@ -6,7 +6,7 @@ const Notification = ({ errorMessage, notificationMessage}) => {
       </div>
     )
   }
-  
+
   if(notificationMessage) {
     return (
       <div className="notification">

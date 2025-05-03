@@ -1,100 +1,100 @@
-import { useEffect, useRef, useState } from "react";
-import noteService from "./services/notes";
-import loginService from "./services/login";
-import Note from "./components/Note";
-import Notification from "./components/Notification";
-import Footer from "./components/Footer";
-import LoginForm from "./components/LoginForm";
-import NoteForm from "./components/NoteForm";
-import Togglable from "./components/Togglable";
+import { useEffect, useRef, useState } from 'react'
+import noteService from './services/notes'
+import loginService from './services/login'
+import Note from './components/Note'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
-  const [showAll, setShowAll] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [notificationMessage, setNotificationMessage] = useState(null);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  const [notes, setNotes] = useState([])
+  const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
   const noteFormRef = useRef()
 
   useEffect(() => {
     const fetchData = async () => {
-      const initialNotes = await noteService.getAll();
-      setNotes(initialNotes);
-    };
-    fetchData();
-  }, []);
+      const initialNotes = await noteService.getAll()
+      setNotes(initialNotes)
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedNoteAppUser");
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      noteService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const toggleImportanceOf = (id) => {
-    const note = notes.find((n) => n.id === id);
-    const changedNote = { ...note, important: !note.important };
+    const note = notes.find((n) => n.id === id)
+    const changedNote = { ...note, important: !note.important }
 
     noteService
       .update(id, changedNote)
       .then((returnedNote) => {
-        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
+        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)))
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error.message)
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
-        );
-        setTimeout(() => setErrorMessage(null), 5000);
-        setNotes(notes.filter((n) => n.id !== id));
-      });
-  };
+        )
+        setTimeout(() => setErrorMessage(null), 5000)
+        setNotes(notes.filter((n) => n.id !== id))
+      })
+  }
 
   const addNote = (noteObject) => {
     noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
       .then((returnedNote) => {
-        setNotes(notes.concat(returnedNote));
+        setNotes(notes.concat(returnedNote))
       })
       .catch((error) => {
-        setErrorMessage(error.response.data.error);
-        setTimeout(() => setErrorMessage(null), 5000);
-      });
-  };
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+      })
+  }
 
-  const notesToShow = showAll ? notes : notes.filter((note) => note.important);
+  const notesToShow = showAll ? notes : notes.filter((note) => note.important)
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      const user = await loginService.login({ username, password });
-      noteService.setToken(user.token);
-      window.localStorage.setItem("loggedNoteAppUser", JSON.stringify(user));
-      setUser(user);
-      setNotificationMessage(`${user.username} logged in succesfully`);
-      setTimeout(() => setNotificationMessage(null), 5000);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => setErrorMessage(null), 5000);
+      const user = await loginService.login({ username, password })
+      noteService.setToken(user.token)
+      window.localStorage.setItem('loggedNoteAppUser', JSON.stringify(user))
+      setUser(user)
+      setNotificationMessage(`${user.username} logged in succesfully`)
+      setTimeout(() => setNotificationMessage(null), 5000)
+      setUsername('')
+      setPassword('')
+    } catch (error) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => setErrorMessage(null), 5000)
     }
-  };
+  }
 
   const handleLogout = () => {
-    if (window.confirm("do you want to logut?")) {
-      window.localStorage.removeItem("loggedNoteAppUser");
-      setNotificationMessage(`${user.username} logged out succesfully`);
-      setTimeout(() => setNotificationMessage(null), 5000);
-      setUser(null);
+    if (window.confirm('do you want to logut?')) {
+      window.localStorage.removeItem('loggedNoteAppUser')
+      setNotificationMessage(`${user.username} logged out succesfully`)
+      setTimeout(() => setNotificationMessage(null), 5000)
+      setUser(null)
     }
-  };
+  }
 
   return (
     <div>
@@ -124,7 +124,7 @@ const App = () => {
       )}
       <div>
         <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? "important" : "all"}
+          show {showAll ? 'important' : 'all'}
         </button>
       </div>
       <ul>
@@ -139,7 +139,7 @@ const App = () => {
 
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

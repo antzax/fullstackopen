@@ -26,7 +26,7 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-export default { 
+export default {
   getAll,
   create,
   update,
