@@ -11,18 +11,14 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      blogService.getAll().then((blogs) => setBlogs(blogs));
-    }
-  }, []);
-
-  useEffect(() => {
+  useEffect( () => {
     const userJSON = window.localStorage.getItem("loggedInUser");
+
     if (userJSON) {
       const user = JSON.parse(userJSON);
-      setUser(user);
       blogService.setToken(user.token);
+      setUser(user);
+      blogService.getAll(user.token).then(blogs => setBlogs(blogs))
     }
   }, []);
 
@@ -45,7 +41,11 @@ const App = () => {
     }
   };
 
-  const handleLogout = 
+  const handleLogout = () => {
+    setUser(null)
+    window.localStorage.removeItem("loggedInUser")
+  }
+
   return (
     <div>
       {user && <p>{user.username} logged in <button onClick={handleLogout}>log out</button></p>}
