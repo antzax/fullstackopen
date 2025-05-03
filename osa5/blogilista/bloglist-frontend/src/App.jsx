@@ -4,7 +4,8 @@ import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import NewBlogForm from "./components/NewBlogForm";
-import './main.css'
+import Togglable from "./components/Togglable";
+import "./main.css";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,18 +13,15 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState(null);
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
 
-  useEffect( () => {
+  useEffect(() => {
     const userJSON = window.localStorage.getItem("loggedInUser");
 
     if (userJSON) {
       const user = JSON.parse(userJSON);
       blogService.setToken(user.token);
       setUser(user);
-      blogService.getAll(user.token).then(blogs => setBlogs(blogs))
+      blogService.getAll(user.token).then((blogs) => setBlogs(blogs));
     }
   }, []);
 
@@ -47,48 +45,62 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setUser(null)
-    window.localStorage.removeItem("loggedInUser")
+    setUser(null);
+    window.localStorage.removeItem("loggedInUser");
     setNotification(`${user.username} logged out`);
     setTimeout(() => setNotification(null), 3000);
-  }
+  };
 
-  const addBlog = async (e) => {
-    e.preventDefault()
-
-    const newBlogObject = {
-      title,
-      author,
-      url,
-    }
-
-    const savedBlog = await blogService.create(newBlogObject)
-    setBlogs(blogs.concat(savedBlog))
-
-    setTitle("")
-    setAuthor("")
-    setUrl("")
+  const addBlog = async (newBlogObject) => {
+    const savedBlog = await blogService.create(newBlogObject);
+    setBlogs(blogs.concat(savedBlog));
 
     setNotification(`${savedBlog.title} added succesfully`);
     setTimeout(() => setNotification(null), 3000);
+  };
+
+  const changeLikes = async (newBlogObject) => {
+    const savedBlog = await blogService.update(newBlogObject, newBlogObject.id)
+    setBlogs(blogs.map(blog => blog.id === savedBlog.id ? savedBlog : blog))
+
+    setNotification("You liked this blog");
+    setTimeout(() => setNotification(null), 3000);
   }
 
- 
+  const deleteBlog = async (id) => {
+    await blogService.destroy(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+
+    setNotification("Blog deleted succesfully");
+    setTimeout(() => setNotification(null), 3000);
+  }
+
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
-      {user && <p>{user.username} logged in <button onClick={handleLogout}>log out</button></p>}
+      {user && (
+        <p>
+          {user.username} logged in{" "}
+          <button onClick={handleLogout}>log out</button>
+        </p>
+      )}
 
       {notification && <p className="notification">{notification}</p>}
 
       {user ? (
         <div>
-          <h2>blogs</h2>
+          <Togglable openLabel="new blog" closeLabel="cancel">
+            <NewBlogForm createBlog={addBlog} />
+          </Togglable>
 
-          <NewBlogForm addBlog={addBlog} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} />
-
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+          {sortedBlogs.map((blog) => (
+            <div key={blog.id}>
+              <h2>{blog.title}</h2>
+              <Togglable openLabel="show" closeLabel="hide">
+                <Blog key={blog.id} blog={blog} changeLikes={changeLikes} user={user} deleteBlog={deleteBlog} />
+              </Togglable>
+            </div>
           ))}
         </div>
       ) : (
@@ -100,7 +112,6 @@ const App = () => {
           handleLogin={handleLogin}
         />
       )}
-
     </div>
   );
 };

@@ -27,28 +27,36 @@ blogsRouter.delete('/:id', async (request, response) => {
   const user = request.user
 
   const blog = await Blog.findById(id)
-  
-  if(blog.user.toString() === user.id.toString()) {
-    await Blog.findByIdAndDelete(id)
-  }
 
+  if(blog.user.toString() !== user.id.toString()) {
+    return response.status(403).end()
+  }
+  
+  console.log("blog deleted")
+  await Blog.findByIdAndDelete(id)
   response.status(204).end()
 })
 
 blogsRouter.put('/:id', async (request, response) => {
   const { author, title, url, likes } = request.body
+  const user = request.user
   const id = request.params.id
 
-  const doc = await Blog.findById(id)
+  let blog = await Blog.findById(id)
+  
+  if(!blog) return response.status(404).json({ error: 'Blog not found' })
+  
+  if (blog.user.toString() !== user.id.toString()) {
+    return response.status(403).end()
+  }
 
-  doc.title = title
-  doc.author = author
-  doc.url = url
-  doc.likes = likes
+  blog.author = author
+  blog.title = title
+  blog.url = url
+  blog.likes = likes
 
-  const savedDoc = await doc.save()
-
-  response.status(201).json(savedDoc)
+  const savedBlog = await blog.save()
+  return response.status(201).json(savedBlog)
 })
 
 module.exports = blogsRouter

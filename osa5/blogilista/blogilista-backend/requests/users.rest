@@ -4,7 +4,7 @@ POST http://localhost:3001/api/users/
 Content-Type: application/json
 
 {
-  "username": "player",
-  "password": "sekret"
+  "username": "root",
+  "password": "root"
 }
 
