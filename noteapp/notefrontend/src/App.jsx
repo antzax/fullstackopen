@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import noteService from "./services/notes";
 import loginService from "./services/login";
 import Note from "./components/Note";
@@ -10,13 +10,13 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const noteFormRef = useRef()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,22 +54,14 @@ const App = () => {
       });
   };
 
-  const addNote = (event) => {
-    event.preventDefault();
-
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
-    };
-
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
       .then((returnedNote) => {
         setNotes(notes.concat(returnedNote));
-        setNewNote("");
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage(error.response.data.error);
         setTimeout(() => setErrorMessage(null), 5000);
       });
@@ -115,12 +107,8 @@ const App = () => {
       {user ? (
         <div>
           <p>{user.name} logged in</p>
-          <Togglable buttonLabel="new note">
-            <NoteForm
-              handleChange={setNewNote}
-              onSubmit={addNote}
-              value={newNote}
-            />
+          <Togglable buttonLabel="new note" ref={noteFormRef}>
+            <NoteForm createNote={addNote}/>
           </Togglable>
         </div>
       ) : (
