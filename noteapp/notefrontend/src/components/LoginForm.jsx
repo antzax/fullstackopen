@@ -5,14 +5,12 @@ const LoginForm = ({
   password,
   setPassword,
 }) => {
-
   return (
     <form onSubmit={handleSubmit} >
       <div>
           username
         <input
           type="text"
-          data-testid="username"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
@@ -22,7 +20,6 @@ const LoginForm = ({
           password
         <input
           type="password"
-          data-testid="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
