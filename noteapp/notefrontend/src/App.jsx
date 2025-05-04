@@ -82,7 +82,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('wrong username or password')
       setTimeout(() => setErrorMessage(null), 5000)
     }
   }
@@ -112,7 +112,7 @@ const App = () => {
           </Togglable>
         </div>
       ) : (
-        <Togglable buttonLabel="login">
+        <Togglable buttonLabel="log in">
           <LoginForm
             username={username}
             setUsername={setUsername}

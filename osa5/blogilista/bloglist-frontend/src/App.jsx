@@ -60,22 +60,24 @@ const App = () => {
   };
 
   const changeLikes = async (newBlogObject) => {
-    const savedBlog = await blogService.update(newBlogObject, newBlogObject.id)
-    setBlogs(blogs.map(blog => blog.id === savedBlog.id ? savedBlog : blog))
+    const savedBlog = await blogService.update(newBlogObject, newBlogObject.id);
+    setBlogs(
+      blogs.map((blog) => (blog.id === savedBlog.id ? savedBlog : blog))
+    );
 
     setNotification("You liked this blog");
     setTimeout(() => setNotification(null), 3000);
-  }
+  };
 
   const deleteBlog = async (id) => {
-    await blogService.destroy(id)
-    setBlogs(blogs.filter(blog => blog.id !== id))
+    await blogService.destroy(id);
+    setBlogs(blogs.filter((blog) => blog.id !== id));
 
     setNotification("Blog deleted succesfully");
     setTimeout(() => setNotification(null), 3000);
-  }
+  };
 
-  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
   return (
     <div>
@@ -94,14 +96,17 @@ const App = () => {
             <NewBlogForm createBlog={addBlog} />
           </Togglable>
 
-          {sortedBlogs.map((blog) => (
-            <div key={blog.id}>
-              <h2>{blog.title}</h2>
-              <Togglable openLabel="show" closeLabel="hide">
-                <Blog key={blog.id} blog={blog} changeLikes={changeLikes} user={user} deleteBlog={deleteBlog} />
-              </Togglable>
-            </div>
-          ))}
+          <div className="blog-container">
+            {sortedBlogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                changeLikes={changeLikes}
+                user={user}
+                deleteBlog={deleteBlog}
+              />
+            ))}
+          </div>
         </div>
       ) : (
         <LoginForm
