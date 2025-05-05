@@ -32,17 +32,42 @@
     },
     {
       "content": "test",
-      "votes": 16,
+      "votes": 18,
       "id": "b0df"
     },
     {
-      "id": "74a1",
       "content": "test",
-      "votes": 0
+      "votes": 2,
+      "id": "74a1"
     },
     {
       "id": "0894",
       "content": "asdasd",
+      "votes": 0
+    },
+    {
+      "id": "a25b",
+      "content": "test",
+      "votes": 0
+    },
+    {
+      "id": "b308",
+      "content": "test",
+      "votes": 0
+    },
+    {
+      "id": "3e21",
+      "content": "test",
+      "votes": 0
+    },
+    {
+      "id": "d867",
+      "content": "moi",
+      "votes": 0
+    },
+    {
+      "id": "376a",
+      "content": "te",
       "votes": 0
     }
   ]
