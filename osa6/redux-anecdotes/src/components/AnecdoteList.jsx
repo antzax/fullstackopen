@@ -14,14 +14,13 @@ const AnecdoteList = () => {
   const handleVote = (anecdote) => {
     dispatch(voteAnecdote(anecdote.id))
     dispatch(sendNotification(`Vote sent succesfully!`))
-    setTimeout(() => dispatch(resetNotification), 5000)
+    setTimeout(() => dispatch(resetNotification()), 5000)
   }
 
   return (
     <div>
       {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
-          <p>{anecdote.id}</p>
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
