@@ -83,7 +83,6 @@ const App = () => {
     <div>
       {user && (
         <p>
-          {user.username} logged in{" "}
           <button onClick={handleLogout}>log out</button>
         </p>
       )}
