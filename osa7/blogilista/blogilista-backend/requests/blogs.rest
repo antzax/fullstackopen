@@ -1,0 +1,29 @@
+GET http://localhost:3001/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RtYW4iLCJpZCI6IjY4MWU2YzkwYWM4MGE5Y2ZlMmM0YTI0ZSIsImlhdCI6MTc0NjgzMjE0NX0.PfkAY7lm06tU6HohtkIWcGcJ-Z57Lw7CKDuTy4L0v_E
+
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImlkIjoiNjgxM2FkMjZjNTI3NmRiNjEzMjc3YjBkIiwiaWF0IjoxNzQ2MTIxMDc2fQ.YFGcynR2a6775uTZPiSOrU680G4jNfvKmmIiHKw9sbg
+
+{
+  "title": "The random title",
+  "author": "John Wick",
+  "url": "www.random.com",
+  "likes": 0
+}
+###
+DELETE http://localhost:3001/api/blogs/6813ed1acd06ab1a94a4641e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImlkIjoiNjgxM2FkMjZjNTI3NmRiNjEzMjc3YjBkIiwiaWF0IjoxNzQ2MTIxMDc2fQ.YFGcynR2a6775uTZPiSOrU680G4jNfvKmmIiHKw9sbg
+###
+PUT http://localhost:3001/api/blogs/68124336870121dcd6449beb
+Content-Type: application/json
+
+{
+  "author": "but",
+  "title": "putblog",
+  "url": "www.put.fi",
+  "likes": 1
+}
+###
