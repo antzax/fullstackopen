@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+
+# Node modules
+node_modules
+
+# Other generated files
+*.min.js

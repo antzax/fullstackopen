@@ -1,0 +1,22 @@
+### Index Persons
+GET http://localhost:3001/api/persons
+### Show Person
+GET http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
+### Destroy person
+DELETE http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
+### Create Person
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Testi Henkilö",
+  "number": "123123123"
+}
+### Update Person
+PUT http://localhost:3001/api/persons/6810d9ae11d0aa2cc68c5be7
+Content-Type: application/json
+
+{
+  "name": "Put testi Henkilö",
+  "number": "123"
+}
