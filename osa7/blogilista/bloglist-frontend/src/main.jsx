@@ -13,6 +13,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </NotificationDispatchContext>
   </QueryClientProvider>,
 );
-
-
-//test
